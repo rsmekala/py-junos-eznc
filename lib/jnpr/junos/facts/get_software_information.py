@@ -98,7 +98,7 @@ def provides_facts():
                        'Routing Engine.',
             'version_info': 'The Junos version of the current Routing Engine '
                             'as a version_info object.',
-            'arch': "A string containing the Junos architecture running on "
+            'kernel': "A string containing the Junos Kernel type running on "
                      "current Routing engine",
             'version_RE0': "A string containing the Junos version of the "
                            "RE in slot 0. (Assuming the system contains an "
@@ -119,8 +119,8 @@ def get_facts(device):
     model_info = None
     version = None
     ver_info = None
-    re_arch_info = None
-    arch = None
+    re_kernel_info = None
+    kernel = None
     version_RE0 = None
     version_RE1 = None
 
@@ -137,7 +137,7 @@ def get_facts(device):
         re_hostname = re_sw_info.findtext('./host-name')
         # First try the <junos-version> tag present in >= 15.1
         re_version = re_sw_info.findtext('./junos-version')
-        re_arch = re_sw_info.findtext(
+        re_kernel = re_sw_info.findtext(
             './package-information[name="os-kernel"]/comment')
         if re_version is None:
             # For < 15.1, get version from the "junos" package.
@@ -178,10 +178,10 @@ def get_facts(device):
         if re_version is not None:
             junos_info[re_name] = {'text': re_version,
                                    'object': version_info(re_version), }
-        if re_arch_info is None and re_arch is not None:
-            re_arch_info = {}
-        if re_arch is not None:
-            re_arch_info[re_name] = re_arch
+        if re_kernel_info is None and re_kernel is not None:
+            re_kernel_info = {}
+        if re_kernel is not None:
+            re_kernel_info[re_name] = re_kernel
         # Check to see if re_name is the RE we are currently connected to.
         # There are at least five cases to handle.
         this_re = False
@@ -222,8 +222,8 @@ def get_facts(device):
                 model = re_model.upper()
             if version is None:
                 version = re_version
-            if arch is None:
-                arch = re_arch
+            if kernel is None:
+                kernel = re_kernel
 
     if version is None:
         version = '0.0I0.0'
@@ -256,11 +256,11 @@ def get_facts(device):
         elif 'server1' in junos_info:
             version_RE1 = junos_info['server1']['text']
 
-    if arch is not None:
-        if '32' in arch:
-            arch = '32-bit'
-        if '64' in arch:
-            arch = '64-bit'
+    if kernel is not None:
+        if '32' in kernel:
+            kernel = '32-bit'
+        if '64' in kernel:
+            kernel = '64-bit'
 
     return {'junos_info': junos_info,
             'hostname': hostname,
@@ -269,6 +269,6 @@ def get_facts(device):
             'model_info': model_info,
             'version': version,
             'version_info': ver_info,
-            'arch': arch,
+            'kernel': kernel,
             'version_RE0': version_RE0,
             'version_RE1': version_RE1, }
