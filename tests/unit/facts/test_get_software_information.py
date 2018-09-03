@@ -40,6 +40,7 @@ class TestGetSoftwareInformation(unittest.TestCase):
                          (16, 1, 'R', '1', 11))
         self.assertEqual(self.dev.facts['version_RE0'], '16.1R1.11')
         self.assertEqual(self.dev.facts['version_RE1'], None)
+        self.assertEqual(self.dev.facts['kernel'], '32-bit')
 
     @patch('jnpr.junos.Device.execute')
     def test_sw_info_vc(self, mock_execute):
@@ -63,6 +64,7 @@ class TestGetSoftwareInformation(unittest.TestCase):
                          (15, 1, 'I', '20161209', '0'))
         self.assertEqual(self.dev.facts['version_RE0'], None)
         self.assertEqual(self.dev.facts['version_RE1'], None)
+        self.assertEqual(self.dev.facts['kernel'], '64-bit')
 
     @patch('jnpr.junos.Device.execute')
     def test_sw_info_simple(self, mock_execute):
@@ -80,6 +82,7 @@ class TestGetSoftwareInformation(unittest.TestCase):
                          (12, 3, 'X', (48, 'D', 40), 5))
         self.assertEqual(self.dev.facts['version_RE0'], '12.3X48-D40.5')
         self.assertEqual(self.dev.facts['version_RE1'], None)
+        self.assertEqual(self.dev.facts['kernel'], None)
 
     @patch('jnpr.junos.Device.execute')
     def test_sw_info_no_version(self, mock_execute):
@@ -91,6 +94,7 @@ class TestGetSoftwareInformation(unittest.TestCase):
         self.assertEqual(self.dev.facts['version'], '0.0I0.0')
         self.assertEqual(self.dev.facts['version_RE0'], None)
         self.assertEqual(self.dev.facts['version_RE1'], None)
+        self.assertEqual(self.dev.facts['kernel'], None)
 
     @patch('jnpr.junos.Device.execute')
     def test_sw_info_dual(self, mock_execute):
@@ -106,6 +110,7 @@ class TestGetSoftwareInformation(unittest.TestCase):
         self.assertEqual(self.dev.facts['version'], '15.1F5.15-C1.12')
         self.assertEqual(self.dev.facts['version_RE0'], '15.1F5.15-C1.12')
         self.assertEqual(self.dev.facts['version_RE1'], '15.1F5.15')
+        self.assertEqual(self.dev.facts['kernel'], '32-bit')
 
     @patch('jnpr.junos.Device.execute')
     def test_sw_info_dual_other_re_off(self, mock_execute):
@@ -118,6 +123,7 @@ class TestGetSoftwareInformation(unittest.TestCase):
         self.assertEqual(self.dev.facts['model_info'], {'re1': 'MX960'})
         self.assertEqual(self.dev.facts['version'], '18.3I20180716_1639')
         self.assertEqual(self.dev.facts['version_RE1'], '18.3I20180716_1639')
+        self.assertEqual(self.dev.facts['kernel'], '32-bit')
 
     @patch('jnpr.junos.Device.execute')
     def test_sw_info_txp(self, mock_execute):
@@ -130,6 +136,7 @@ class TestGetSoftwareInformation(unittest.TestCase):
         self.assertEqual(self.dev.facts['version'], '13.3R9-S2.1')
         self.assertEqual(self.dev.facts['version_RE0'], '13.3R9-S2.1')
         self.assertEqual(self.dev.facts['version_RE1'], None)
+        self.assertEqual(self.dev.facts['kernel'], None)
 
     @patch('jnpr.junos.Device.execute')
     def test_sw_info_ex(self, mock_execute):
@@ -143,6 +150,7 @@ class TestGetSoftwareInformation(unittest.TestCase):
         self.assertEqual(self.dev.facts['version'], '11.4R1.6')
         self.assertEqual(self.dev.facts['version_RE0'], '11.4R1.6')
         self.assertEqual(self.dev.facts['version_RE1'], None)
+        self.assertEqual(self.dev.facts['kernel'], None)
 
     @patch('jnpr.junos.Device.execute')
     def test_sw_info_nfx(self, mock_execute):
@@ -157,6 +165,7 @@ class TestGetSoftwareInformation(unittest.TestCase):
                          {'re0': 'NFX250_S2_10_T'})
         self.assertEqual(self.dev.facts['junos_info']['re0']['text'],
                          '15.1X53-D45.3')
+        self.assertEqual(self.dev.facts['kernel'], None)
 
     @patch('jnpr.junos.Device.execute')
     def test_sw_info_bsys(self, mock_execute):
@@ -185,6 +194,7 @@ class TestGetSoftwareInformation(unittest.TestCase):
                           'gnf4-re1': 'MX2020'})
         self.assertEqual(self.dev.facts['junos_info']['bsys-re0']['text'],
                          '17.4-20170706_dev_common.0')
+        self.assertEqual(self.dev.facts['kernel'], '64-bit')
 
     @patch('jnpr.junos.Device.execute')
     def test_sw_info_jdm(self, mock_execute):
@@ -206,6 +216,7 @@ class TestGetSoftwareInformation(unittest.TestCase):
                          '17.4-20170718_dev_common.1-secure')
         self.assertEqual(self.dev.facts['junos_info']['server1']['text'],
                          '17.4-20170718_dev_common.1-secure')
+        self.assertEqual(self.dev.facts['kernel'], None)
 
     @patch('jnpr.junos.Device.execute')
     def test_sw_info_gnf(self, mock_execute):
@@ -229,6 +240,7 @@ class TestGetSoftwareInformation(unittest.TestCase):
                          '18.4-20180707_dev_common.0')
         self.assertEqual(self.dev.facts['junos_info']['gnf7-re1']['text'],
                          '18.4-20180707_dev_common.0')
+        self.assertEqual(self.dev.facts['kernel'], '64-bit')
 
     @patch('jnpr.junos.Device.execute')
     def test_sw_info_srx_cluster(self, mock_execute):
@@ -250,6 +262,7 @@ class TestGetSoftwareInformation(unittest.TestCase):
                          '17.3-2017-07-02.0_RELEASE_173_THROTTLE')
         self.assertEqual(self.dev.facts['junos_info']['node1']['text'],
                          '17.3-2017-07-02.0_RELEASE_173_THROTTLE')
+        self.assertEqual(self.dev.facts['kernel'], '64-bit')
 
     @patch('jnpr.junos.Device.execute')
     def test_sw_info_err(self, mock_execute):
@@ -263,6 +276,7 @@ class TestGetSoftwareInformation(unittest.TestCase):
         self.assertEqual(self.dev.facts['version_RE1'], None)
         self.assertEqual(self.dev.facts['model_info'], None)
         self.assertEqual(self.dev.facts['junos_info'], None)
+        self.assertEqual(self.dev.facts['kernel'], None)
 
     def _read_file(self, fname):
         from ncclient.xml_ import NCElement
